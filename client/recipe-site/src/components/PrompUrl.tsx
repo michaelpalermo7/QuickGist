@@ -1,7 +1,24 @@
 import { useState } from "react";
+import { FormEvent } from "react";
+import axios from "axios";
 
-export default function SubmitHandler() {
-  alert('submitted')
+const SubmitHandler = async (event: FormEvent, videoUrl: string) => {
+      event.preventDefault();
+
+    const part = 'youtube.com/watch?v='
+    const part2 = 'youtu.be/'
+
+    if(!(videoUrl.includes(part)) && !(videoUrl.includes(part2))) {
+      alert('Not a valid youtube URL')
+    }
+
+
+    else {
+    const response = await axios.post("http://localhost:5001/api", { url: videoUrl });
+    alert("Video URL submitted successfully!");
+    console.log(response);
+    }
+  
 }
 
 
@@ -17,7 +34,7 @@ export const Header = () => {
       </h1>
 
       <div className="px-6 py-4">
-        <form onSubmit={SubmitHandler}>
+        <form onSubmit={(e) => SubmitHandler(e, videoUrl)}>
          <input
           type="text"
           placeholder="Enter YouTube URL..."
