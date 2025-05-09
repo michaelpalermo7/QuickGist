@@ -76,4 +76,4 @@ For any questions or issues, contact me at:
 
 ## Demo
 
-![QuickGist demo](assets/demo.gif)
+Found in demo.gif
