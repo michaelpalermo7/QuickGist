@@ -73,3 +73,7 @@ QuickGist is an application that allows users to generate summaries of YouTube v
 
 For any questions or issues, contact me at:  
 **mikeypalermo7@gmail.com**
+
+## Demo
+
+![QuickGist demo](assets/demo.gif)
