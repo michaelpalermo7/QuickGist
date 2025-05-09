@@ -1,15 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES6",                   // Output JavaScript version
-    "module": "CommonJS",               // Use CommonJS for module system (required for Node.js)
-    "outDir": "./dist",                 // Compiled JavaScript will go into the 'dist' folder
-    "rootDir": "./src",                 // The source TypeScript files are in the 'src' folder
-    "esModuleInterop": true,            // Allow default imports from non-ESModule modules
-    "strict": true  
+    "target": "ES6",
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "strict": true
   },
-  "include": [
-    "src/**/*.ts"
-  ]
-  
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
-

@@ -1,8 +1,11 @@
+import React from 'react';
+
 import { PromptUrl } from "../components/PromptUrl";
 import { Summary } from "../components/Summary";
 import { PageBackground } from "../components/PageBackground";
 import { useState } from "react";
 import { Navbar } from "../components/Navbar";
+
 
 export const HomePage = () => {
     const [summary, setSummary] = useState("Summary of the video will appear here...");

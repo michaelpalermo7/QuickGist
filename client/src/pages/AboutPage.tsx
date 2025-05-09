@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Icon } from "../components/Icon"
 import { Navbar } from "../components/Navbar"
 import { PageBackground } from "../components/PageBackground"
@@ -15,7 +17,7 @@ export const AboutPage =() => {
             </div>
         
         
-        <h1 className='text-center text-2xl font-bold mt-30 text-gray-800 tracking-wide'> 
+        <h1 className='text-center text-2xl mt-30 text-gray-800 tracking-wide'> 
             QuickGist allows you to turn youtube videos <br />
             into concise and informative summaries with <br/>
             the click of a button

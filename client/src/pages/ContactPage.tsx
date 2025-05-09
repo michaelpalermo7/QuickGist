@@ -1,6 +1,9 @@
+import React from 'react';
+
 import { Icon } from "../components/Icon"
 import { Navbar } from "../components/Navbar"
 import { PageBackground } from "../components/PageBackground"
+
 
 export default function ContactPage() {
     return (

@@ -1,3 +1,4 @@
+import React from 'react';
 import icon from '../assets/icon.png';
 
 export const Icon = () => {
