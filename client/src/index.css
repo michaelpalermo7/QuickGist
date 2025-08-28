@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+/* --- Global dark-blue theme --- */
+:root {
+  --bg-dark: #0b1220; /* deep navy */
+  --bg-card: #0f1a2b; /* slightly lighter for cards */
+  --text-main: #e6eefc; /* near-white with blue tint */
+  --text-muted: #b6c2df;
+  --accent: #3b82f6; /* Tailwind blue-500 */
+  --accent-strong: #2563eb; /* blue-600 */
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-main);
+}
+
+/* Make all default text light and links blue */
+a {
+  color: white;
+}

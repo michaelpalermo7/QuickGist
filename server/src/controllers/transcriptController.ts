@@ -1,25 +1,22 @@
-// controllers/transcriptController.ts
 import { Request, Response } from "express";
 import { getTranscriptData } from "../services/transcriptService";
-import { summarizeText } from "../services/summarizeService";
+import { summarizeTextToJSON } from "../services/summarizeService";
 
 export async function getTranscript(
   req: Request,
   res: Response
 ): Promise<void> {
   const { url } = req.body;
-  console.log("[getTranscript] url=", url); // debug
+  console.log("[getTranscript] url=", url);
 
   try {
     const data = await getTranscriptData(url);
-    console.log("[getTranscript] transcript length=", data?.segments?.length); // debug
     res.status(200).json(data);
   } catch (e: any) {
-    console.error("[getTranscript] error:", e); // debug
-    res.status(500).json({
-      message: "Transcript fetch failed",
-      error: e.message || String(e),
-    });
+    console.error("[getTranscript] error:", e);
+    res
+      .status(500)
+      .json({ message: "Transcript fetch failed", error: e.message });
   }
 }
 
@@ -28,27 +25,17 @@ export async function summarizeTranscript(
   res: Response
 ): Promise<void> {
   const { url } = req.body;
-  console.log("[summarizeTranscript] url=", url); // debug
+  console.log("[summarizeTranscript] url=", url);
 
   try {
     const data = await getTranscriptData(url);
-    console.log(
-      "[summarizeTranscript] segments length=",
-      data?.segments?.length
-    ); // debug
-
     const fullText = data.segments.map((s: any) => s.text).join(" ");
-    console.log("[summarizeTranscript] fullText chars=", fullText.length); // debug
+    console.log("[summarizeTranscript] fullText chars=", fullText.length);
 
-    const summary = await summarizeText(fullText);
-    console.log("[summarizeTranscript] summary length=", summary?.length || 0); // debug
-
-    res.status(200).json({ videoId: data.videoId, summary });
+    const summaryText = await summarizeTextToJSON(fullText, data.title);
+    res.status(200).json({ videoId: data.videoId, summary: summaryText });
   } catch (e: any) {
-    console.error("[summarizeTranscript] error:", e); // debug
-    res.status(500).json({
-      message: "Summarization failed",
-      error: e.message || String(e),
-    });
+    console.error("[summarizeTranscript] error:", e);
+    res.status(500).json({ message: "Summarization failed", error: e.message });
   }
 }

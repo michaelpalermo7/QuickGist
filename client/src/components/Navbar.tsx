@@ -1,24 +1,33 @@
-
-import React from 'react';
-import { Logo } from "./Logo"
+import React from "react";
+import { Logo } from "./Logo";
 
 export const Navbar = () => {
+  return (
+    <nav className="w-full">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <Logo />
 
-    return (
-    
-        <nav className='px-30 py-4 h-full flex items-center justify-between bg-white shadow-md'>
-            
-            <Logo />
-
-            <ul className="flex gap-3 space-x-6 list-none">
-                <li>
-                    <a className= "text-lg" href="/contact">Contact</a>
-                </li>
-                <li>
-                    <a className= "text-lg" href="/about">About</a>
-                </li>
-            </ul>
-        </nav>
-    
-)
-}
+        {/* Links */}
+        <ul className="flex space-x-8 list-none">
+          <li>
+            <a
+              className="text-lg font-medium hover:text-[var(--accent)] transition-colors"
+              href="/contact"
+            >
+              Contact
+            </a>
+          </li>
+          <li>
+            <a
+              className="text-lg font-medium hover:text-[var(--accent)] transition-colors"
+              href="/about"
+            >
+              About
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
+};

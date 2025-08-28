@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
 export const PageBackground = () => {
-
-    return (
-        <section style={{
-            backgroundImage: 'radial-gradient(125% 100% at 50% 0%, #ffffff 75%, #f77187)'
-        }}
-        className='absolute inset-0 z-[-1] grid min-h-screen place-content-center overflow-hidden bg-gray-950 px-4 py-24 text-gray-200'>
-
-        </section>
-
-    )
-}
+  return (
+    <section
+      style={{
+        backgroundImage:
+          "radial-gradient(120% 100% at 50% 0%, #1e3a8a 0%, #0b1220 70%)",
+      }}
+      className="absolute inset-0 z-[-1] min-h-screen bg-[#0b1220]"
+      aria-hidden="true"
+    />
+  );
+};

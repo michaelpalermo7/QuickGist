@@ -1,32 +1,27 @@
-import React from 'react';
-
+import React, { useState } from "react";
 import { PromptUrl } from "../components/PromptUrl";
 import { Summary } from "../components/Summary";
 import { PageBackground } from "../components/PageBackground";
-import { useState } from "react";
 import { Navbar } from "../components/Navbar";
-
+import { Hero } from "../components/Hero";
 
 export const HomePage = () => {
-    const [summary, setSummary] = useState("Summary of the video will appear here...");
+  const [summary, setSummary] = useState(
+    "Summary of the video will appear here..."
+  );
 
   return (
-    <div>
-      <Navbar/>
-    <div className="flex flex-col h-full overflow-hidden"> 
-        <PageBackground/>
+    <div className="min-h-screen relative">
+      <Navbar />
+      <Hero />
+      <PageBackground />
 
-      <div className="flex gap-x-2 h-full pb-3 pt-3">
-        
-        <div className="flex items-start justify-center w-1/2 bg-transparent p-6">
+      <main className="relative flex flex-col min-h-[calc(100vh-64px)]">
+        <div className="flex flex-col flex-1 items-center justify-center px-4 sm:px-6 md:px-8 py- md:py-12 space-y-16">
           <PromptUrl setSummary={setSummary} />
-        </div>
-
-        <div className="w-1/2 bg-transparent p-6">
           <Summary summary={summary} />
         </div>
-      </div>
-    </div>
+      </main>
     </div>
   );
 };

@@ -1,8 +1,10 @@
 import React, { useState, FormEvent } from "react";
 import { SubmitVideoUrl } from "../services/api/SubmitVideoUrl";
+import { StructuredSummary } from "../types/summary";
+import { SubmitButton } from "../components/SubmitButton";
 
 interface PromptUrlProps {
-  setSummary: React.Dispatch<React.SetStateAction<string>>;
+  setSummary: React.Dispatch<React.SetStateAction<StructuredSummary | string>>;
 }
 
 export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
@@ -10,11 +12,12 @@ export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
   const [loading, setLoading] = useState(false);
 
   const SubmitHandler = async (event: FormEvent) => {
+    event.preventDefault(); // <-- ensure form doesn't reload
     try {
       setLoading(true);
       const data = await SubmitVideoUrl(event, videoUrl);
       if (data && data.summary) {
-        setSummary(data.summary); // <<— CHANGED (aiOutput → summary)
+        setSummary(data.summary);
       } else {
         setSummary("No summary available.");
       }
@@ -27,26 +30,22 @@ export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
   };
 
   return (
-    <div className="w-[600px] h-[180px] p-6 ml-20 rounded-lg shadow-lg bg-white">
-      <h1 className="text-center text-3xl font-extrabold text-gray-800 tracking-wide">
+    <div className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl p-6 md:p-8 mx-auto rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur">
+      <h1 className="text-center text-2xl md:text-3xl font-extrabold tracking-wide">
         Enter a URL
       </h1>
-      <div className="px-6 py-4">
-        <form onSubmit={SubmitHandler}>
+
+      <div className="mt-5">
+        <form onSubmit={SubmitHandler} className="space-y-3">
           <input
             type="text"
             placeholder="Enter YouTube URL..."
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg"
-          />
-          <button
-            type="submit"
-            className="w-full px-6 py-2 bg-rose-500 mt-3 text-white font-semibold rounded-lg hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-opacity-75 transition"
+            className="w-full p-3 rounded-lg bg-[#0b1730] border border-[#1e2a44] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] placeholder-[var(--text-muted)]"
             disabled={loading}
-          >
-            {loading ? "Working…" : "Get Gist"}
-          </button>
+          />
+          <SubmitButton loading={loading} />
         </form>
       </div>
     </div>
