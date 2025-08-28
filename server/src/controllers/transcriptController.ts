@@ -21,6 +21,7 @@ export async function getTranscript(
     res
       .status(500)
       .json({ message: "Transcript fetch failed", error: e.message });
+    console.error("[summarizeTranscript] error:", e);
   }
 }
 
