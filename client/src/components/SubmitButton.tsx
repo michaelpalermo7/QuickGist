@@ -7,12 +7,11 @@ type Props = {
 
 export const SubmitButton: React.FC<Props> = ({ loading }) => {
   return (
-    //button
     <LoadingButton
       type="submit"
       fullWidth
-      loading={loading} // <-- enables built-in circular spinner
-      loadingPosition="start" // spinner on the left, like in docs
+      loading={loading}
+      loadingPosition="start"
       variant="contained"
       sx={{
         backgroundColor: "var(--accent)",
@@ -25,7 +24,7 @@ export const SubmitButton: React.FC<Props> = ({ loading }) => {
         "&.Mui-disabled": { color: "white", opacity: 0.7 },
       }}
     >
-      {loading ? "Working…" : "Get Gist"}
+      {loading ? "Fetching Summary…" : "Get Gist"}
     </LoadingButton>
   );
 };

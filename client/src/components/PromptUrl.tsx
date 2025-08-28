@@ -1,7 +1,8 @@
+// src/components/PromptUrl.tsx
 import React, { useState, FormEvent } from "react";
 import { SubmitVideoUrl } from "../services/api/SubmitVideoUrl";
 import { StructuredSummary } from "../types/summary";
-import { SubmitButton } from "../components/SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 
 interface PromptUrlProps {
   setSummary: React.Dispatch<React.SetStateAction<StructuredSummary | string>>;
@@ -12,18 +13,20 @@ export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
   const [loading, setLoading] = useState(false);
 
   const SubmitHandler = async (event: FormEvent) => {
-    event.preventDefault(); // <-- ensure form doesn't reload
+    event.preventDefault();
     try {
       setLoading(true);
-      const data = await SubmitVideoUrl(event, videoUrl);
-      if (data && data.summary) {
-        setSummary(data.summary);
+      const result = await SubmitVideoUrl(event, videoUrl);
+
+      if (typeof result === "string") {
+        setSummary(result); // error string → show in summary box
+      } else if (result?.summary) {
+        setSummary(result.summary); // success → show summary
       } else {
         setSummary("No summary available.");
       }
     } catch (err) {
-      console.error(err);
-      setSummary("Error fetching summary.");
+      setSummary("Could not summarize video");
     } finally {
       setLoading(false);
     }

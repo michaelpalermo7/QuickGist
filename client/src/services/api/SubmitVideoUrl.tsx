@@ -1,27 +1,24 @@
+// src/services/api/SubmitVideoUrl.ts
 import { FormEvent } from "react";
 import { api } from "../api/client";
+import type { SummarizeResponse } from "./types";
 
-export const SubmitVideoUrl = async (event: FormEvent, videoUrl: string) => {
+export const SubmitVideoUrl = async (
+  event: FormEvent,
+  videoUrl: string
+): Promise<SummarizeResponse | string | null> => {
   event.preventDefault();
 
-  const part1 = "youtube.com/watch?v=";
-  const part2 = "youtu.be/";
-
-  if (!videoUrl.includes(part1) && !videoUrl.includes(part2)) {
-    alert("Not a valid YouTube URL");
-    return null;
+  try {
+    const { data } = await api.post<SummarizeResponse>("/summarize", {
+      url: videoUrl,
+    });
+    return data; // success → returns { videoId, summary }
+  } catch (err: any) {
+    const status = err?.response?.status;
+    if (status === 400) {
+      return "Not a valid YouTube URL"; // <--- fixed message
+    }
+    return "Could not summarize video"; // <--- fallback message
   }
-
-  // NEW: call the REST /summarize endpoint
-  const { data } = await api.post("/summarize", { url: videoUrl });
-  // data looks like: { videoId, summary }
-  return data;
-};
-
-// (Optional) if you also want raw transcript in other screens:
-export const FetchTranscript = async (event: FormEvent, videoUrl: string) => {
-  event.preventDefault();
-  const { data } = await api.post("/transcript", { url: videoUrl });
-  // data looks like: { videoId, segments: [{ text, start, duration }, ...] }
-  return data;
 };
