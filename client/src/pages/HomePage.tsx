@@ -4,9 +4,10 @@ import { Summary } from "../components/Summary";
 import { PageBackground } from "../components/PageBackground";
 import { Navbar } from "../components/Navbar";
 import { Hero } from "../components/Hero";
+import type { StructuredSummary } from "../types/summary";
 
 export const HomePage = () => {
-  const [summary, setSummary] = useState(
+  const [summary, setSummary] = useState<StructuredSummary | string>(
     "Summary of the video will appear here..."
   );
 
