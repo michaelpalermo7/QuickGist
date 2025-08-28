@@ -13,7 +13,7 @@ export const SubmitVideoUrl = async (
   event.preventDefault();
 
   try {
-    const { data } = await api.post<SummarizeResponse>("/summarize", {
+    const { data } = await api.post<SummarizeResponse>("/api/summarize", {
       url: videoUrl,
     });
     return data;
