@@ -1,4 +1,3 @@
-// src/routes/transcriptRoutes.ts
 import { Router } from "express";
 import {
   getTranscript,

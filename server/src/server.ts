@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import transcriptRoutes from "../src/routes/transcriptRoutes";
+import transcriptRoutes from "./routes/transcriptRoutes";
 import dotenv from "dotenv";
 
 dotenv.config();
