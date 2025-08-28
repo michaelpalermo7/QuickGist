@@ -1,29 +1,28 @@
-// src/services/summarizeService.ts
 import dotenv from "dotenv";
 dotenv.config();
 import OpenAI from "openai";
 
 const openAi = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-/** Final JSON shape sent to the frontend (no import required) */
+/** Final structured JSON shape sent to the frontend */
 type FinalSummary = {
   title: string;
-  executive_summary: string; // 1 compact paragraph (4–6 sentences)
-  key_highlights: string[]; // 5–8 concise bullets
-  core_insights: string[]; // 4–6 concise bullets
-  actionable_takeaways: string[]; // 3–5 practical bullets
+  executive_summary: string;
+  key_highlights: string[];
+  core_insights: string[];
+  actionable_takeaways: string[];
 };
 
 /** ---- Tunables ---- */
-const CHUNK_MAX_WORDS = 1600; // fewer chunks → fewer API calls
-const CHUNK_CONCURRENCY = 4; // summarize chunks in parallel (batch of 4)
-const CHUNK_MAX_TOKENS = 600; // shorter per-chunk output = cheaper/faster
-const MERGE_MAX_TOKENS = 2200; // room for final structured JSON
+const CHUNK_MAX_WORDS = 1600;
+const CHUNK_CONCURRENCY = 4;
+const CHUNK_MAX_TOKENS = 600;
+const MERGE_MAX_TOKENS = 2200;
 
 const CHUNK_MODEL = "gpt-4o-mini";
 const MERGE_MODEL = "gpt-4o-mini";
 
-/** ---- Prompts (hoisted for tiny perf win) ---- */
+/** ---- Prompts ---- */
 const CHUNK_SYSTEM_PROMPT = `
 You are a professional summarizer. Summarize this text in 2–4 sentences.
 No markdown, no lists, no sections—just a cohesive paragraph.
@@ -47,7 +46,12 @@ Rules:
 - Keep bullets short and informative (one sentence each).
 `.trim();
 
-/** Split transcript into chunks by word count */
+/**
+ * Splits a transcript into evenly sized word chunks.
+ * @param text Full transcript text
+ * @param maxWords Maximum words per chunk (defaults to CHUNK_MAX_WORDS)
+ * @returns string[] where each item is a contiguous slice of the transcript
+ */
 function chunkTranscript(text: string, maxWords = CHUNK_MAX_WORDS): string[] {
   const words = text.split(/\s+/);
   const chunks: string[] = [];
@@ -57,7 +61,11 @@ function chunkTranscript(text: string, maxWords = CHUNK_MAX_WORDS): string[] {
   return chunks;
 }
 
-/** Summarize one chunk in plain prose (no formatting) */
+/**
+ * Summarizes a single chunk into a short plain paragraph.
+ * @param chunk A chunk of raw transcript text
+ * @returns Promise<string> plain prose (no markdown, no lists)
+ */
 async function summarizeChunkPlain(chunk: string): Promise<string> {
   const resp = await openAi.chat.completions.create({
     model: CHUNK_MODEL,
@@ -71,7 +79,11 @@ async function summarizeChunkPlain(chunk: string): Promise<string> {
   return resp.choices[0]?.message?.content?.trim() || "";
 }
 
-/** Simple batching with Promise.all for concurrency */
+/**
+ * Summarizes many chunks with simple batched concurrency.
+ * @param chunks Array of transcript chunks to summarize
+ * @returns Promise<string[]> array of plain-paragraph summaries (same order as input)
+ */
 async function summarizeChunksBatched(chunks: string[]): Promise<string[]> {
   const out: string[] = [];
   for (let i = 0; i < chunks.length; i += CHUNK_CONCURRENCY) {
@@ -82,7 +94,12 @@ async function summarizeChunksBatched(chunks: string[]): Promise<string[]> {
   return out;
 }
 
-/** Merge many plain chunk summaries into ONE structured JSON */
+/**
+ * Merges multiple plain chunk summaries into one structured JSON result.
+ * @param summaries Array of plain-text chunk summaries
+ * @param videoTitle Optional known title to prefer if the model omits one
+ * @returns Promise<FinalSummary> with title, executive_summary, bullets, and takeaways
+ */
 async function mergeSummariesToJSON(
   summaries: string[],
   videoTitle?: string
@@ -94,7 +111,7 @@ async function mergeSummariesToJSON(
   ].join("\n\n");
 
   const resp = await openAi.chat.completions.create({
-    model: MERGE_MODEL, // consider "gpt-4o" here for higher quality, same API
+    model: MERGE_MODEL,
     temperature: 0.25,
     max_tokens: MERGE_MAX_TOKENS,
     messages: [
@@ -104,7 +121,7 @@ async function mergeSummariesToJSON(
   });
 
   const raw = (resp.choices[0]?.message?.content || "").trim();
-  // Remove accidental code fences if present
+  // Remove accidental code fences if they are present
   const cleaned = raw
     .replace(/^```json\s*/i, "")
     .replace(/^```\s*/i, "")
@@ -127,7 +144,6 @@ async function mergeSummariesToJSON(
         : [],
     };
   } catch {
-    // Safe fallback
     return {
       title: videoTitle || "Video Summary",
       executive_summary:
@@ -139,7 +155,16 @@ async function mergeSummariesToJSON(
   }
 }
 
-/** Public entry: Chunk → summarize each (batched) → merge into structured JSON */
+/**
+ * Produces a full structured summary JSON from an entire transcript.
+ * - Normalizes whitespace
+ * - Splits into chunks
+ * - Summarizes each chunk with batching
+ * - Merges all parts into a FinalSummary
+ * @param fullText Full transcript text
+ * @param videoTitle Optional video title to include/anchor in the result
+ * @returns Promise<FinalSummary> ready for the frontend
+ */
 export async function summarizeTextToJSON(
   fullText: string,
   videoTitle?: string
@@ -157,12 +182,7 @@ export async function summarizeTextToJSON(
     };
   }
 
-  // 1) Split into chunks
   const chunks = chunkTranscript(text);
-
-  // 2) Summarize each chunk (in parallel batches)
   const parts = await summarizeChunksBatched(chunks);
-
-  // 3) Merge into final structured JSON
   return await mergeSummariesToJSON(parts, videoTitle);
 }

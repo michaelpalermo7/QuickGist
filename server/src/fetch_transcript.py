@@ -1,9 +1,12 @@
-# fetch_transcript.py
 import sys, json
 from urllib.parse import urlparse, parse_qs
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound, VideoUnavailable
 
 def extract_video_id(url_or_id: str) -> str:
+    """
+    Extracts the YouTube video ID from either a full URL or a raw ID string.
+    This ensures downstream code always gets a clean video ID.
+    """
     u = urlparse(url_or_id)
     if u.netloc in ("youtu.be", "www.youtu.be"):
         return u.path.strip("/")
@@ -16,6 +19,10 @@ def extract_video_id(url_or_id: str) -> str:
     return url_or_id
 
 def main():
+    """
+    Reads URL and language options from stdin, fetches the transcript, 
+    and prints structured JSON so the Node.js process can consume it.
+    """
     data = json.loads(sys.stdin.read() or "{}")
     url = data.get("url", "")
     langs = data.get("languages") or ["en", "en-US", "en-GB"]
@@ -28,7 +35,7 @@ def main():
     api = YouTubeTranscriptApi()
 
     try:
-        fetched = api.fetch(video_id, languages=langs)  # FetchedTranscript (iterable of snippets)
+        fetched = api.fetch(video_id, languages=langs)
         out = [{
             "text": s.text.replace("\n", " ").strip(),
             "start": float(s.start),
@@ -36,7 +43,6 @@ def main():
         } for s in fetched]
         print(json.dumps({"videoId": video_id, "segments": out}, ensure_ascii=False))
     except (TranscriptsDisabled, NoTranscriptFound, VideoUnavailable) as e:
-        # return empty segments so Node can decide how to respond
         print(json.dumps({"videoId": video_id, "segments": [], "error": str(e)}))
         sys.exit(1)
 

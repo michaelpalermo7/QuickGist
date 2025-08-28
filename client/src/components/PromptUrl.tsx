@@ -19,9 +19,9 @@ export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
       const result = await SubmitVideoUrl(event, videoUrl);
 
       if (typeof result === "string") {
-        setSummary(result); // error string → show in summary box
+        setSummary(result);
       } else if (result?.summary) {
-        setSummary(result.summary); // success → show summary
+        setSummary(result.summary);
       } else {
         setSummary("No summary available.");
       }

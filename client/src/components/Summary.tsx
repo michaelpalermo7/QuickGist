@@ -1,5 +1,6 @@
 import React from "react";
 import type { StructuredSummary } from "../types/summary";
+import { DownloadSummaryButton } from "./DownloadButton";
 
 function isStructured(x: any): x is StructuredSummary {
   return (
@@ -118,6 +119,10 @@ export const Summary = ({
           </ul>
         </section>
       )}
+
+      <div className="mt-6 flex justify-center">
+        <DownloadSummaryButton summary={data} filename="video-summary.md" />
+      </div>
     </div>
   );
 };

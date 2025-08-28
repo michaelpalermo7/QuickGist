@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { getTranscriptData } from "../services/transcriptService";
 import { summarizeTextToJSON } from "../services/summarizeService";
 
+/**
+ * Handles transcript fetch requests.
+ * Returns raw transcript JSON so the client can view or further process it.
+ */
 export async function getTranscript(
   req: Request,
   res: Response
@@ -20,6 +24,10 @@ export async function getTranscript(
   }
 }
 
+/**
+ * Handles summarization requests.
+ * Fetches transcript first, then produces structured JSON summary.
+ */
 export async function summarizeTranscript(
   req: Request,
   res: Response

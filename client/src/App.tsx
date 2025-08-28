@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
-import ContactPage from "./pages/ContactPage";
 import NoPage from "./pages/NoPage";
 
 function App() {
@@ -15,7 +14,6 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>

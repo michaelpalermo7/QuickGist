@@ -1,7 +1,12 @@
-// src/middleware/validate.ts
 import type { RequestHandler } from "express";
 import type { AnyZodObject, ZodError } from "zod";
 
+/**
+ * Middleware factory to validate request data with Zod.
+ * @param schema Zod schema for validation
+ * @param location Request location to validate ("body" | "query" | "params")
+ * @returns Express middleware that validates and short-circuits on errors
+ */
 export const validate =
   (
     schema: AnyZodObject,
