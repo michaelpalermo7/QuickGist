@@ -26,24 +26,32 @@ export function runPython(url: string): Promise<any> {
         try {
           resolve(JSON.parse(out));
         } catch (e: any) {
+          console.error("[Python JSON parse error]", e.message);
           reject(new Error("Failed to parse Python JSON: " + e.message));
         }
       } else {
+        // Log everything when Python fails
+        console.error("[Python exited with code]", code);
+        console.error("[Python stdout]", out);
+        console.error("[Python stderr]", err);
+
         try {
           const body = JSON.parse(out || "{}");
           if (body.errorType === "YOUTUBE_BLOCKED") {
-            const err: any = new Error("YouTube blocked this server IP");
-            err.httpStatus = 429;
-            err.body = body;
-            return reject(err);
+            const blockedErr: any = new Error("YouTube blocked this server IP");
+            blockedErr.httpStatus = 429;
+            blockedErr.body = body;
+            return reject(blockedErr);
           }
-          const err: any = new Error(
+          const genErr: any = new Error(
             body.error || `Transcript fetch exited ${code}`
           );
-          err.httpStatus = 502;
-          err.body = body;
-          return reject(err);
-        } catch {
+          genErr.httpStatus = 502;
+          genErr.body = body;
+          return reject(genErr);
+        } catch (e: any) {
+          // Fall back if JSON parse fails
+          console.error("[Python JSON parse failed]", e.message);
           reject(new Error(`Python exited ${code}: ${err || "no stderr"}`));
         }
       }
