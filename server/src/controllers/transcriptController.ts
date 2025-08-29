@@ -38,6 +38,7 @@ export async function summarizeTranscript(
   req: Request,
   res: Response
 ): Promise<void> {
+  console.log("[summarizeTranscript] body=", req.body);
   const { url } = req.body;
   console.log("[summarizeTranscript] url=", url);
 
