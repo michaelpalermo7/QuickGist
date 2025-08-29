@@ -1,79 +1,105 @@
 # QuickGist
 
-QuickGist is an application that allows users to generate summaries of YouTube videos using OpenAI's API.
+QuickGist is a web application that generates concise summaries of YouTube videos using OpenAI's API.  
+It automatically fetches video transcripts and produces structured summaries in seconds.
 
-## Technologies Used
+## 🚀 Live Demo
 
-- React.js
-- Node.js
-- TypeScript
-- Express
-- CORS
-- TailwindCSS
-- Vite
+- **Website:** [https://quick-gist-ten.vercel.app](https://quick-gist-ten.vercel.app)
 
-## Table of Contents
+---
 
-1. [Installation](#installation)
-2. [Setup](#setup)
-3. [Usage](#usage)
-4. [Notes](#notes)
-5. [Contact](#contact)
+## 🛠️ Technologies Used
 
-## Installation
+- **Frontend:** React.js, TypeScript, TailwindCSS, Vite, MUI
+- **Backend:** Node.js, Express, Python 3, YouTube Transcript API
+- **AI:** OpenAI API for summarization
+- **Proxies:** Webshare Residential Rotating Proxies
+- **Deployment:** Vercel (frontend), Render (backend)
+- **Other Tools:** Docker, CORS
+
+---
+
+## 📂 Table of Contents
+
+1. [Features](#features)
+2. [Installation](#installation)
+3. [Setup](#setup)
+4. [Usage](#usage)
+5. [Deployment](#deployment)
+6. [Known Issues](#known-issues)
+7. [Contact](#contact)
+
+---
+
+## ✨ Features
+
+- Fetches YouTube video transcripts automatically
+- Summarizes content using OpenAI's GPT models
+- Uses rotating proxies to avoid IP blocking
+- Fast frontend with React + TailwindCSS
+- Live deployment on Vercel + Render
+
+---
+
+## 📦 Installation
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/yourusername/QuickGist.git
-    ```
+git clone https://github.com/yourusername/QuickGist.git
+cd QuickGist
 
-2. Navigate to the project directory:
+2. Install dependencies for both client and server:
 
-    ```bash
-    cd QuickGist
-    ```
-
-3. Install dependencies for both client and server:
-
-    ```bash
-    npm install
-    ```
+npm install
 
 ## Setup
 
-1. Install dependencies on the client and server by running `npm install`.
-2. Place your OpenAI API key in `server/.env`.
-3. Start the client with:
+1. Backend Environment Variables
 
-    ```bash
-    npm run dev
-    ```
+Create server/.env:
 
-4. Start the server with:
+    OPENAI_API_KEY=your_openai_key
+    YT_PROXY_USERNAME=your_webshare_username
+    YT_PROXY_PASSWORD=your_webshare_password
+    YT_PROXY_LOCATIONS=us,de # optional 2. Frontend Environment Variables
 
-    ```bash
-    npm start
-    ```
+Create client/.env:
+
+    VITE_API_BASE_URL=https://quickgist-mda4.onrender.com
 
 ## Usage
 
-1. Paste the full YouTube URL into the form. Example:  
-   `https://www.youtube.com/watch?v=MtOQhWeTiWY`
-2. Press **Get Gist**.
-3. Wait a few seconds for the program to generate the summary.
-4. The summary will be displayed on the screen.
+Development Mode
 
-## Notes
+1. Start the backend:
 
-- Make sure to replace `yourusername` with your actual GitHub username in the clone command.
-- Ensure you add a valid OpenAI API key in `QuickGist/server/.env` for the application to function properly.
+cd server
+npm run dev
 
-## Contact
+2. Start the frontend:
 
-For any questions or issues, contact me at:  
-**mikeypalermo7@gmail.com**
+cd client
+npm run dev
 
-## Demo
+3. Open the app in your browser at http://localhost:5173.
 
-Found in demo.gif
+Production Mode
+
+1. Pushing to main will automatically redeploy on Vercel + Render.
+
+## Deployment
+
+Frontend: Vercel handles hosting + build pipeline.
+
+Backend: Render runs Express + Python services.
+
+Proxies: Webshare rotating residential proxies to prevent YouTube IP blocking.
+
+## Known Issues
+
+❌ Videos with disabled subtitles cannot be summarized.
+
+🕒 If the proxy pool is exhausted, transcript fetching may fail temporarily.
+
+---
