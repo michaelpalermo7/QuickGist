@@ -3,13 +3,13 @@
 QuickGist is a web application that generates concise summaries of YouTube videos using OpenAI's API.  
 It automatically fetches video transcripts and produces structured summaries in seconds.
 
-## 🚀 Live Demo
+## Live Demo
 
 - **Website:** [https://quick-gist-ten.vercel.app](https://quick-gist-ten.vercel.app)
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Frontend:** React.js, TypeScript, TailwindCSS, Vite, MUI
 - **Backend:** Node.js, Express, Python 3, YouTube Transcript API
@@ -20,7 +20,7 @@ It automatically fetches video transcripts and produces structured summaries in 
 
 ---
 
-## 📂 Table of Contents
+## Table of Contents
 
 1. [Features](#features)
 2. [Installation](#installation)
@@ -32,7 +32,7 @@ It automatically fetches video transcripts and produces structured summaries in 
 
 ---
 
-## ✨ Features
+## Features
 
 - Fetches YouTube video transcripts automatically
 - Summarizes content using OpenAI's GPT models
@@ -42,16 +42,16 @@ It automatically fetches video transcripts and produces structured summaries in 
 
 ---
 
-## 📦 Installation
+## Installation
 
 1. Clone the repository:
 
-git clone https://github.com/yourusername/QuickGist.git
-cd QuickGist
+   git clone https://github.com/yourusername/QuickGist.git
+   cd QuickGist
 
 2. Install dependencies for both client and server:
 
-npm install
+   npm install
 
 ## Setup
 
@@ -74,13 +74,13 @@ Development Mode
 
 1. Start the backend:
 
-cd server
-npm run dev
+   cd server
+   npm run dev
 
 2. Start the frontend:
 
-cd client
-npm run dev
+   cd client
+   npm run dev
 
 3. Open the app in your browser at http://localhost:5173.
 
@@ -98,8 +98,8 @@ Proxies: Webshare rotating residential proxies to prevent YouTube IP blocking.
 
 ## Known Issues
 
-❌ Videos with disabled subtitles cannot be summarized.
+Videos with disabled subtitles cannot be summarized.
 
-🕒 If the proxy pool is exhausted, transcript fetching may fail temporarily.
+If the proxy pool is exhausted, transcript fetching may fail temporarily.
 
 ---
