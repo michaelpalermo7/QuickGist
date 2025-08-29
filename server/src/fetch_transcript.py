@@ -1,5 +1,7 @@
+# fetch_transcript.py (Py 3.9 compatible)
 import sys, json, os, time, random
 from urllib.parse import urlparse, parse_qs
+from typing import Optional
 from youtube_transcript_api import (
     YouTubeTranscriptApi,
     TranscriptsDisabled, NoTranscriptFound, VideoUnavailable,
@@ -18,7 +20,7 @@ def extract_video_id(url_or_id: str) -> str:
             return parts[-1]
     return url_or_id
 
-def _get_proxy():
+def _get_proxy() -> Optional[str]:
     """Pick random proxy if YT_PROXY_LIST exists, else single proxy."""
     proxy = os.getenv("YT_PROXY", "").strip()
     proxy_list = os.getenv("YT_PROXY_LIST", "").strip()
@@ -28,7 +30,7 @@ def _get_proxy():
             return random.choice(choices)
     return proxy or None
 
-def _proxies_dict(url: str | None):
+def _proxies_dict(url: Optional[str]):
     return {"http": url, "https": url} if url else None
 
 def main():
