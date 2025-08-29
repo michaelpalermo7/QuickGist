@@ -1,4 +1,4 @@
-# fetch_transcript.py (Py 3.9 compatible)
+# fetch_transcript.py
 import sys, json, os, time, random
 from urllib.parse import urlparse, parse_qs
 from typing import Optional
@@ -21,7 +21,6 @@ def extract_video_id(url_or_id: str) -> str:
     return url_or_id
 
 def _get_proxy() -> Optional[str]:
-    """Pick random proxy if YT_PROXY_LIST exists, else single proxy."""
     proxy = os.getenv("YT_PROXY", "").strip()
     proxy_list = os.getenv("YT_PROXY_LIST", "").strip()
     if proxy_list:
@@ -44,6 +43,7 @@ def main():
 
     video_id = extract_video_id(url)
     proxy_url = _get_proxy()
+    proxies = _proxies_dict(proxy_url)
 
     attempts = int(os.getenv("YT_RETRY_ATTEMPTS", "3"))
     base_delay_ms = int(os.getenv("YT_RETRY_BASE_MS", "300"))
@@ -52,7 +52,7 @@ def main():
     for i in range(attempts):
         try:
             fetched = YouTubeTranscriptApi.get_transcript(
-                video_id, languages=langs, proxies=_proxies_dict(proxy_url)
+                video_id, languages=langs, proxies=proxies
             )
             out = [{
                 "text": s["text"].replace("\n", " ").strip(),
@@ -61,7 +61,7 @@ def main():
             } for s in fetched]
             print(json.dumps({"videoId": video_id, "segments": out}, ensure_ascii=False))
             return
-        except (_errors.RequestBlocked, _errors.IPBlocked) as e:
+        except _errors.RequestBlocked as e:               # ← only this
             last_err = {"type": "YOUTUBE_BLOCKED", "message": str(e)}
         except (TranscriptsDisabled, NoTranscriptFound, VideoUnavailable) as e:
             print(json.dumps({"videoId": video_id, "segments": [], "error": str(e)}))
