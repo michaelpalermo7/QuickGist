@@ -8,7 +8,9 @@ import path from "path";
 export function runPython(url: string): Promise<any> {
   return new Promise((resolve, reject) => {
     const PY = process.env.PYTHON_BIN || "python3";
-    const scriptPath = path.resolve(__dirname, "fetch_transcript.py");
+    const scriptPath = path.resolve(__dirname, "../fetch_transcript.py");
+
+    console.log("[runPython] Using script path:", scriptPath);
 
     const py = spawn(PY, [scriptPath], {
       cwd: process.cwd(),
