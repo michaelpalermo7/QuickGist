@@ -1,12 +1,19 @@
-# fetch_transcript.py
+# fetch_transcript.py (Py3.9-safe, proxy-aware, version-safe errors)
 import sys, json, os, time, random
 from urllib.parse import urlparse, parse_qs
 from typing import Optional
+
+import requests
+import urllib3
+
 from youtube_transcript_api import (
     YouTubeTranscriptApi,
     TranscriptsDisabled, NoTranscriptFound, VideoUnavailable,
     _errors
 )
+
+# Try to load RequestBlocked if present; otherwise leave as None
+YTRequestBlocked = getattr(_errors, "RequestBlocked", None)
 
 def extract_video_id(url_or_id: str) -> str:
     u = urlparse(url_or_id)
@@ -61,31 +68,41 @@ def main():
             } for s in fetched]
             print(json.dumps({"videoId": video_id, "segments": out}, ensure_ascii=False))
             return
-        except _errors.RequestBlocked as e:               # ← only this
-            last_err = {"type": "YOUTUBE_BLOCKED", "message": str(e)}
+
         except (TranscriptsDisabled, NoTranscriptFound, VideoUnavailable) as e:
             print(json.dumps({"videoId": video_id, "segments": [], "error": str(e)}))
             sys.exit(1)
+
+        except (requests.exceptions.ProxyError,
+                requests.exceptions.ConnectTimeout,
+                requests.exceptions.ConnectionError,
+                urllib3.exceptions.ProxyError,
+                urllib3.exceptions.NameResolutionError) as e:
+            # Proxy endpoint bad/unreachable
+            last_err = {"type": "PROXY_ERROR", "message": str(e)}
+
         except Exception as e:
-            last_err = {"type": "GENERIC_ERROR", "message": str(e)}
+            # If library exposes RequestBlocked and this is one, tag it
+            if YTRequestBlocked and isinstance(e, YTRequestBlocked):
+                last_err = {"type": "YOUTUBE_BLOCKED", "message": str(e)}
+            else:
+                last_err = {"type": "GENERIC_ERROR", "message": str(e)}
 
         delay = (base_delay_ms * (2 ** i)) + random.randint(0, 150)
         time.sleep(delay / 1000.0)
 
-    if last_err and last_err["type"] == "YOUTUBE_BLOCKED":
-        print(json.dumps({
-            "videoId": video_id,
-            "segments": [],
-            "error": "RequestBlocked",
-            "errorType": "YOUTUBE_BLOCKED"
-        }))
-        sys.exit(3)
+    # Retries exhausted → return structured error
+    if last_err:
+        payload = {"videoId": video_id, "segments": [], "error": last_err["message"]}
+        if last_err["type"] == "YOUTUBE_BLOCKED":
+            payload["errorType"] = "YOUTUBE_BLOCKED"
+            print(json.dumps(payload)); sys.exit(3)
+        if last_err["type"] == "PROXY_ERROR":
+            payload["errorType"] = "PROXY_ERROR"
+            print(json.dumps(payload)); sys.exit(4)
+        print(json.dumps(payload)); sys.exit(1)
 
-    print(json.dumps({
-        "videoId": video_id,
-        "segments": [],
-        "error": last_err["message"] if last_err else "Unknown error"
-    }))
+    print(json.dumps({"videoId": video_id, "segments": [], "error": "Unknown error"}))
     sys.exit(1)
 
 if __name__ == "__main__":
