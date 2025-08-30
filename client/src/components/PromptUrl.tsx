@@ -33,7 +33,7 @@ export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
   };
 
   return (
-    <div className="w-full h-full min-h-[420px] md:min-h-[460px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur border border-green-400/20 flex flex-col">
+    <div className="w-full h-full min-h-[470px] md:min-h-[510px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur border border-green-400/20 flex flex-col">
       <h1 className="text-center text-2xl md:text-3xl font-extrabold tracking-wide">
         Enter a URL
       </h1>

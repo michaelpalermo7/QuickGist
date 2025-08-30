@@ -34,7 +34,7 @@ export const Summary = ({
   // Fallback: plain string
   if (!data) {
     return (
-      <div className="w-full h-full min-h-[420px] md:min-h-[460px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur flex flex-col border border-green-400/20">
+      <div className="w-full h-full min-h-[470px] md:min-h-[510px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur flex flex-col border border-green-400/20">
         <div className="flex-1 rounded-lg overflow-y-auto">
           <p className="text-[var(--text-muted)] text-base leading-7 whitespace-pre-wrap">
             {typeof summary === "string" ? summary : "No summary available."}
@@ -45,7 +45,7 @@ export const Summary = ({
   }
 
   return (
-    <div className="w-full h-[420px] md:min-h-[460px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur border border-green-400/20 flex flex-col">
+    <div className="w-full h-[470px] md:min-h-[510px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur border border-green-400/20 flex flex-col">
       <div className="flex-1 overflow-y-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
           {data.title || "Video Summary"}
@@ -114,7 +114,7 @@ export const Summary = ({
         )}
       </div>
 
-      <div className="mt-auto mb-2 flex justify-center">
+      <div className="mt-3 flex justify-center">
         <DownloadSummaryButton summary={data} filename="video-summary.md" />
       </div>
     </div>
