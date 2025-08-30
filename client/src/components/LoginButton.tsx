@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from "react";
 import Button from "@mui/material/Button";
 
-/* Will be for user authentication */
+/* Will be for next phase */
 interface LoginButtonProps {
   href: string;
   children: ReactNode;

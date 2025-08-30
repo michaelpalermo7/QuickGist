@@ -18,7 +18,6 @@ export const Summary = ({
 }: {
   summary: StructuredSummary | string;
 }) => {
-  // Allow backend to return JSON as a string
   const data: StructuredSummary | null =
     typeof summary === "string"
       ? (() => {
@@ -35,7 +34,7 @@ export const Summary = ({
   // Fallback: plain string
   if (!data) {
     return (
-      <div className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl h-[420px] md:h-[460px] p-6 md:p-8 mt-12 md:mt-8 mx-auto rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur flex flex-col">
+      <div className="w-full h-full min-h-[420px] md:min-h-[460px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur flex flex-col border border-green-400/20">
         <div className="flex-1 rounded-lg overflow-y-auto">
           <p className="text-[var(--text-muted)] text-base leading-7 whitespace-pre-wrap">
             {typeof summary === "string" ? summary : "No summary available."}
@@ -45,80 +44,76 @@ export const Summary = ({
     );
   }
 
-  // Pretty, bot-style rendering
   return (
-    <div className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl p-6 md:p-8 mt-12 md:mt-8 mx-auto rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur">
-      {/* Title */}
+    <div className="w-full h-[420px] md:min-h-[460px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur flex flex-col">
       <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
         {data.title || "Video Summary"}
       </h2>
 
-      {/* Executive Summary */}
-      <section className="mb-6">
-        <h3 className="text-xl font-semibold text-white mb-2">
-          📹 Executive Summary
-        </h3>
-        <p className="text-[var(--text-muted)] text-base leading-7 whitespace-pre-wrap">
-          {data.executive_summary}
-        </p>
-      </section>
-
-      {/* Key Highlights */}
-      {!!data.key_highlights.length && (
+      <div className="flex-1 overflow-y-auto">
         <section className="mb-6">
           <h3 className="text-xl font-semibold text-white mb-2">
-            ✨ Key Highlights
+            📹 Executive Summary
           </h3>
-          <ul className="space-y-1">
-            {data.key_highlights.map((item, i) => (
-              <li
-                key={i}
-                className="text-[var(--text-muted)] text-base leading-7"
-              >
-                • {item}
-              </li>
-            ))}
-          </ul>
+          <p className="text-[var(--text-muted)] text-base leading-7 whitespace-pre-wrap">
+            {data.executive_summary}
+          </p>
         </section>
-      )}
 
-      {/* Core Insights */}
-      {!!data.core_insights.length && (
-        <section className="mb-6">
-          <h3 className="text-xl font-semibold text-white mb-2">
-            💡 Core Insights
-          </h3>
-          <ul className="space-y-1">
-            {data.core_insights.map((item, i) => (
-              <li
-                key={i}
-                className="text-[var(--text-muted)] text-base leading-7"
-              >
-                • {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+        {!!data.key_highlights.length && (
+          <section className="mb-6">
+            <h3 className="text-xl font-semibold text-white mb-2">
+              ✨ Key Highlights
+            </h3>
+            <ul className="space-y-1">
+              {data.key_highlights.map((item, i) => (
+                <li
+                  key={i}
+                  className="text-[var(--text-muted)] text-base leading-7"
+                >
+                  • {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
-      {/* Actionable Takeaways */}
-      {!!data.actionable_takeaways.length && (
-        <section>
-          <h3 className="text-xl font-semibold text-white mb-2">
-            🎯 Actionable Takeaways
-          </h3>
-          <ul className="space-y-1">
-            {data.actionable_takeaways.map((item, i) => (
-              <li
-                key={i}
-                className="text-[var(--text-muted)] text-base leading-7"
-              >
-                • {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+        {!!data.core_insights.length && (
+          <section className="mb-6">
+            <h3 className="text-xl font-semibold text-white mb-2">
+              💡 Core Insights
+            </h3>
+            <ul className="space-y-1">
+              {data.core_insights.map((item, i) => (
+                <li
+                  key={i}
+                  className="text-[var(--text-muted)] text-base leading-7"
+                >
+                  • {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {!!data.actionable_takeaways.length && (
+          <section>
+            <h3 className="text-xl font-semibold text-white mb-2">
+              🎯 Actionable Takeaways
+            </h3>
+            <ul className="space-y-1">
+              {data.actionable_takeaways.map((item, i) => (
+                <li
+                  key={i}
+                  className="text-[var(--text-muted)] text-base leading-7"
+                >
+                  • {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
 
       <div className="mt-6 flex justify-center">
         <DownloadSummaryButton summary={data} filename="video-summary.md" />

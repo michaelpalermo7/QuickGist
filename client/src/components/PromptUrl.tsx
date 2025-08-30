@@ -1,8 +1,8 @@
-// src/components/PromptUrl.tsx
 import React, { useState, FormEvent } from "react";
 import { SubmitVideoUrl } from "../services/api/SubmitVideoUrl";
 import { StructuredSummary } from "../types/summary";
 import { SubmitButton } from "./SubmitButton";
+import FeatureBullets from "./FeatureBullets";
 
 interface PromptUrlProps {
   setSummary: React.Dispatch<React.SetStateAction<StructuredSummary | string>>;
@@ -25,7 +25,7 @@ export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
       } else {
         setSummary("No summary available.");
       }
-    } catch (err) {
+    } catch {
       setSummary("Could not summarize video");
     } finally {
       setLoading(false);
@@ -33,13 +33,13 @@ export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
   };
 
   return (
-    <div className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl p-6 md:p-8 mx-auto rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur">
+    <div className="w-full h-full min-h-[420px] md:min-h-[460px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur border border-green-400/20 flex flex-col">
       <h1 className="text-center text-2xl md:text-3xl font-extrabold tracking-wide">
         Enter a URL
       </h1>
 
-      <div className="mt-5">
-        <form onSubmit={SubmitHandler} className="space-y-3">
+      <div className="mt-5 flex-1 flex">
+        <form onSubmit={SubmitHandler} className="w-full space-y-3">
           <input
             type="text"
             placeholder="Enter YouTube URL..."
@@ -48,7 +48,13 @@ export const PromptUrl = ({ setSummary }: PromptUrlProps) => {
             className="w-full p-3 rounded-lg bg-[#0b1730] border border-[#1e2a44] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] placeholder-[var(--text-muted)]"
             disabled={loading}
           />
-          <SubmitButton loading={loading} />
+
+          <div className="mt-1">
+            <SubmitButton loading={loading} />
+          </div>
+          <div className="mt-1">
+            <FeatureBullets />
+          </div>
         </form>
       </div>
     </div>
