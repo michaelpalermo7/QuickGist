@@ -46,11 +46,10 @@ export const Summary = ({
 
   return (
     <div className="w-full h-[420px] md:min-h-[460px] p-6 md:p-8 rounded-2xl shadow-xl bg-[var(--bg-card)] backdrop-blur flex flex-col">
-      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
-        {data.title || "Video Summary"}
-      </h2>
-
       <div className="flex-1 overflow-y-auto">
+        <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
+          {data.title || "Video Summary"}
+        </h2>
         <section className="mb-6">
           <h3 className="text-xl font-semibold text-white mb-2">
             📹 Executive Summary
@@ -115,7 +114,7 @@ export const Summary = ({
         )}
       </div>
 
-      <div className="mt-6 flex justify-center">
+      <div className="mt-2 flex justify-center">
         <DownloadSummaryButton summary={data} filename="video-summary.md" />
       </div>
     </div>
